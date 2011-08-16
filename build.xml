@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project basedir="." default="build" name="ClueServices">
 	<property name="src" value="src"/>
+	<property name="lib" value="lib"/>
 	<property name="build" value="build"/>
 	<property name="bin" value="bin"/>
 
 	<path id="ClueServices.classpath">
-		<pathelement location="bin"/>
-		<pathelement location="lib"/>
-		<pathelement location="lib/inject-16.jar"/>
-		<pathelement location="lib/javamail-141.jar"/>
-		<pathelement location="lib/resin.jar"/>
+		<fileset dir="${lib}">
+			<include name="*.jar"/>
+		</fileset>
 	</path>
 
 	<target name="init">
