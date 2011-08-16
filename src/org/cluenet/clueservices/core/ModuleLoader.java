@@ -21,7 +21,7 @@ public class ModuleLoader extends ClassLoader {
 		if( !Pattern.compile( "^org.cluenet.clueservices.(core.)?modules..*$" ).matcher( name ).matches() )
 			return super.loadClass( name );
 		try {
-			String path = "file:" + "/home/cobi/workspace/ClueServices/bin/" + name.replace( '.', '/' ) + ".class";
+			String path = "file:" + name.replace( '.', '/' ) + ".class";
 			URL url = new URL( path );
 			URLConnection conn = url.openConnection();
 			InputStream input = conn.getInputStream();
