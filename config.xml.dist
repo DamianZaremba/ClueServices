@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<server>
+		<ip>cubed.internal.cluenet.org</ip>
+		<port>6167</port>
+		<password></password>
+		<name>clueservices.cluenet.org</name>
+		<numeric>50</numeric>
+		<description>ClueServices - ClueNet IRC Services</description>
+	</server>
+
+	<modules>
+		<module>org.cluenet.clueservices.modules.protocol.UnrealIRCdProtocolModule</module>
+		<module>org.cluenet.clueservices.modules.services.TestingModule</module>
+	</modules>
+</configuration>

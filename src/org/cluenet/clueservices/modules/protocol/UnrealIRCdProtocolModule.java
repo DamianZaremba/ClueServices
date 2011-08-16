@@ -65,10 +65,10 @@ public class UnrealIRCdProtocolModule extends Module {
 	}
 	
 	private void connected() {
-		write( "PASS " + Config.get( "server", "pass" ) );
+		write( "PASS " + Config.get( "password" ) );
 		write( "PROTOCTL NICKv2 NICKIP" );
-		write( "SERVER " + Config.get( "server", "name" ) + " " + Config.get( "server", "numeric" ) + " :" + Config.get( "server", "description" ) );
-		self = ServerFactory.create( Config.get( "server", "name" ), null, Config.get( "server", "description" ) );
+		write( "SERVER " + Config.get( "name" ) + " " + Config.get( "numeric" ) + " :" + Config.get( "description" ) );
+		self = ServerFactory.create( Config.get( "name" ), null, Config.get( "description" ) );
 	}
 
 	private void parseInput( String line ) {

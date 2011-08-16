@@ -73,12 +73,14 @@ public class Core implements Runnable {
 	public void run() {
 		ClassLoader loader = ModuleLoader.class.getClassLoader();
 		moduleLoader = new ModuleLoader( loader );
-		
-		startModule( "org.cluenet.clueservices.modules.services.TestingModule" );
-		startModule( "org.cluenet.clueservices.modules.protocol.UnrealIRCdProtocolModule" );
-		startModule( new SocketModule( Config.get( "server", "ip" ), Integer.parseInt( Config.get( "server", "port" ), 10 ) ) );
-		
-		while( !done )
+
+		for( String module: Config.getModules() ) {
+			System.out.println( "[Core] Loading: " + module );
+			startModule( module );
+		}
+
+		startModule( new SocketModule( Config.get( "ip" ), Integer.parseInt( Config.get( "port" ), 10 ) ) );
+		while( !done ) {
 			try {
 				Event e = queue.take();
 				//System.out.println( "[Core] Event sending: " + e.toString() );
@@ -89,6 +91,6 @@ public class Core implements Runnable {
 					done = true;
 			} catch( InterruptedException e1 ) {
 			}
+		}
 	}
-	
 }
