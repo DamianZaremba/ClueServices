@@ -18,7 +18,7 @@
 	</target>
 
 	<target name="compile" depends="init">
-		<javac srcdir="${src}" destdir="${build}">
+		<javac srcdir="${src}" destdir="${build}" includeantruntime="no">
 			<classpath refid="ClueServices.classpath"/>
 		</javac>
 	</target>
