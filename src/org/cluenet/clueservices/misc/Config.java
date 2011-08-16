@@ -13,10 +13,10 @@ public class Config {
 	
 	private Config() {
 		Map< String, String > server = new HashMap< String, String >(); // Hack until better solution.
-		server.put( "ip", "theta.internal.cluenet.org" );
-		server.put( "port", "6667" );
+		server.put( "ip", "cubed.internal.cluenet.org" );
+		server.put( "port", "6167" );
 		try {
-			BufferedReader passBR = new BufferedReader( new FileReader( "/home/cobi/clueservices.password" ) );
+			BufferedReader passBR = new BufferedReader( new FileReader( "/home/damian/clueservices.password" ) );
 			server.put( "pass", passBR.readLine() );
 		} catch( IOException e ) {
 			e.printStackTrace();
