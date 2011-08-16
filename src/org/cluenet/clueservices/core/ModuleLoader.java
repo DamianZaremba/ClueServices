@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.regex.Pattern;
+import org.cluenet.clueservices.misc.Config;
 
 public class ModuleLoader extends ClassLoader {
 	
@@ -21,7 +22,7 @@ public class ModuleLoader extends ClassLoader {
 		if( !Pattern.compile( "^org.cluenet.clueservices.(core.)?modules..*$" ).matcher( name ).matches() )
 			return super.loadClass( name );
 		try {
-			String path = "file:" + name.replace( '.', '/' ) + ".class";
+			String path = "file:" + Config.get("module_dir") +  name.replace( '.', '/' ) + ".class";
 			URL url = new URL( path );
 			URLConnection conn = url.openConnection();
 			InputStream input = conn.getInputStream();

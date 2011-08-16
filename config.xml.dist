@@ -7,6 +7,7 @@
 		<name>clueservices.cluenet.org</name>
 		<numeric>50</numeric>
 		<description>ClueServices - ClueNet IRC Services</description>
+		<module_dir>/home/damian/ClueServices/build/</module_dir>
 	</server>
 
 	<modules>
