@@ -3,7 +3,6 @@
 	<property name="src" value="src"/>
 	<property name="lib" value="lib"/>
 	<property name="build" value="build"/>
-	<property name="bin" value="bin"/>
 
 	<path id="ClueServices.classpath">
 		<fileset dir="${lib}">
@@ -13,7 +12,6 @@
 
 	<target name="init">
 		<mkdir dir="${build}"/>
-		<mkdir dir="${bin}"/>
 	</target>
 
 	<target name="compile" depends="init">
