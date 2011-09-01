@@ -11,7 +11,7 @@ import org.w3c.dom.Element;
 public class ServerFactory {
 	private static ServerFactory factory = new ServerFactory();
 	private static Map< String, Server > map = Collections.synchronizedMap( new HashMap< String, Server >() );
-	
+
 	public class Server extends IrcObject implements IrcSource {
 		private String name;
 		private Server parent;
@@ -23,7 +23,7 @@ public class ServerFactory {
 			this.description = description;
 			this.isSynchronized = false;
 		}
-		
+
 		public void setSynchronized() {
 			isSynchronized = true;
 		}
@@ -31,15 +31,15 @@ public class ServerFactory {
 		public Boolean isSynchronized() {
 			return isSynchronized;
 		}
-		
+
 		public String toString() {
 			return name;
 		}
-		
+
 		public Server getParent() {
 			return parent;
 		}
-		
+
 		public String getDescription() {
 			return description;
 		}
@@ -58,13 +58,17 @@ public class ServerFactory {
 			return name;
 		}
 	}
-	
+
 	private ServerFactory() {
-		
+
 	}
 
 	public static Server find( String name ) {
 		return map.get( name );
+	}
+
+	public static Map< String, Server> getServers() {
+		return map;
 	}
 
 	public static Server create( String name, Server parent, String description ) {
@@ -72,5 +76,5 @@ public class ServerFactory {
 		map.put( name, srv );
 		return srv;
 	}
-	
+
 }
