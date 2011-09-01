@@ -85,7 +85,7 @@ import com.caucho.quercus.lib.zlib.ZlibModule;
 
 public class TestingModule extends Module {
 	private QuercusEngine php = null;
-	
+
 	@Override
 	protected void event( Event take ) {
 		if( take instanceof ServerSyncEvent ) {
@@ -201,8 +201,8 @@ public class TestingModule extends Module {
 								"import org.cluenet.clueservices.ircEvents.PrivmsgEvent; " +
 								"import org.cluenet.clueservices.ircObjects.UserFactory; " +
 								"import org.cluenet.clueservices.ircObjects.ChannelFactory; " +
-								"import org.cluenet.clueservices.misc.IRC;" + 
-								data.substring( 4 ) + 
+								"import org.cluenet.clueservices.misc.IRC;" +
+								data.substring( 4 ) +
 								" ?>"
 						);
 					} catch( Exception e ) {
@@ -213,10 +213,10 @@ public class TestingModule extends Module {
 			}
 		}
 	}
-	
+
 	@Override
 	protected Boolean init() {
 		return true;
 	}
-	
+
 }

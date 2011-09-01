@@ -47,7 +47,7 @@ import org.cluenet.clueservices.servicesObjects.AccountFactory;
 
 public class UnrealIRCdProtocolModule extends Module {
 	private Server self;
-	
+
 	@Override
 	protected void event( Event e ) {
 		if( e instanceof SocketReadEvent )
@@ -57,13 +57,13 @@ public class UnrealIRCdProtocolModule extends Module {
 		else if( e instanceof ProtocolRequestEvent )
 			processRequest( (ProtocolRequestEvent) e );
 	}
-	
+
 	private void write( String line ) {
 		//System.out.println( line );
 		Core.fireEvent( new SocketWriteRequestEvent( line + "\r\n" ) );
 		parseInput( line );
 	}
-	
+
 	private void connected() {
 		write( "PASS " + Config.get( "password" ) );
 		write( "PROTOCTL NICKv2 NICKIP" );
@@ -73,15 +73,15 @@ public class UnrealIRCdProtocolModule extends Module {
 
 	private void parseInput( String line ) {
 		ParsedIRCLine data = new ParsedIRCLine( line );
-		
+
 		if( data.type.equals( ParsedIRCLine.Type.DIRECT ) ) {
 			if( data.command.equals( "ping" ) && data.pieces.size() > 0 )
 				write( "PONG :" + data.pieces.get( 0 ) );
-			
+
 			else if( data.command.equals( "pong" ) && data.pieces.size() > 0 ) {
 				// TODO: Implement.
 			} else if( data.command.equals( "nick" ) && data.pieces.size() > 10 ) {
-				
+
 				byte[] binaryIP = DatatypeConverter.parseBase64Binary( data.pieces.get( 9 ) );
 				String ip = "";
 				if( binaryIP.length > 4 ) {
@@ -95,7 +95,7 @@ public class UnrealIRCdProtocolModule extends Module {
 						ipParts.add( Integer.toString( (int) b & 0xFF ) );
 					ip = Strings.join( ipParts, "." );
 				}
-				
+
 				User user = UserFactory.create(
 						data.pieces.get( 0 ),		// Nick
 						data.pieces.get( 3 ),		// User
@@ -105,10 +105,10 @@ public class UnrealIRCdProtocolModule extends Module {
 						ip,							// IP
 						ServerFactory.find( data.pieces.get( 5 ) )
 				);
-				
+
 				if( data.pieces.get( 6 ) != "0" )
 					user.setAccount( AccountFactory.find( Integer.parseInt( data.pieces.get( 6 ), 10 ) ) );
-				
+
 				Core.fireEvent( new UserSignonEvent( user ) );
 			} else if( data.command.equals( "pass" ) ) {
 				// TODO: Implement.
@@ -147,7 +147,7 @@ public class UnrealIRCdProtocolModule extends Module {
 			} else if( data.command.equals( "join" ) ) {
 				for( String channelName : data.target.split( "," ) ) {
 					User u = UserFactory.find( data.source );
-					
+
 					if( channelName.startsWith( "0" ) ) {
 						synchronized( u.getChannels() ) {
 							ArrayList< Channel > channels = new ArrayList< Channel >( u.getChannels().values() );
@@ -156,7 +156,7 @@ public class UnrealIRCdProtocolModule extends Module {
 						}
 						continue;
 					}
-					
+
 					Channel chan = ChannelFactory.find( channelName );
 					Boolean created = false;
 					if( chan == null ) {
@@ -203,9 +203,9 @@ public class UnrealIRCdProtocolModule extends Module {
 			} else if( data.command.equals( "nick" ) ) {
 				User u = UserFactory.find( data.source );
 				String oldNick = u.getNick();
-				
+
 				UserFactory.renameUser( u, data.target );
-				
+
 				Core.fireEvent( new UserNickChangeEvent( u, oldNick ) );
 			} else if( data.command.equals( "quit" ) ) {
 				User u = UserFactory.find( data.source );
@@ -224,6 +224,16 @@ public class UnrealIRCdProtocolModule extends Module {
 				}
 				UserFactory.destroy( u );
 				Core.fireEvent( evt );
+			} else if( data.command.equals( "401" ) ) {
+				if( data.pieces.size() >= 2 && data.pieces.get(0).equals( "#secretservices") && data.pieces.get(1).equals( "No such nick/channel" ) ) {
+					// TODO: Fix this to do something useful - it is here to
+					// stop the server spamming its self if the services channel
+					// doesn't exist - We could just force something to JOIN it
+					// at startup...
+					System.out.println( "Unhandled IRC line: " + data );
+				} else {
+					unhandled( data );
+				}
 			} else
 				unhandled( data );
 		}
@@ -241,11 +251,11 @@ public class UnrealIRCdProtocolModule extends Module {
 	private void processPart( User u, Channel c, String reason ) {
 		u.delChannel( c );
 		c.delUser( u );
-		
-		UserLeaveEvent evt = new UserPartEvent( u, c, reason ); 
-		
+
+		UserLeaveEvent evt = new UserPartEvent( u, c, reason );
+
 		Core.fireEvent( evt );
-		
+
 		if( c.isEmpty() ) {
 			ChannelFactory.destroy( c );
 			Core.fireEvent( new ChannelDestructionEvent( c, evt ) );
@@ -261,12 +271,12 @@ public class UnrealIRCdProtocolModule extends Module {
 	protected Boolean init() {
 		return true;
 	}
-	
+
 	private void processRequest( ProtocolRequestEvent evt ) {
 		Event cause = evt.getEvent();
 		processRequestEvent( cause );
 	}
-	
+
 	private void processRequestEvent( Event evt ) {
 		if( evt instanceof NewChannelEvent )
 			processRequestEvent( ( (NewChannelEvent) evt ).getCause() );
@@ -286,8 +296,8 @@ public class UnrealIRCdProtocolModule extends Module {
 			User u = ( (UserSignonEvent) evt ).getParameters();
 			write( "NICK " + u.getNick() + " 1 " + ( System.currentTimeMillis() / 1000 ) + " " + u.getUser() + " " + u.getHost() + " " + self + " 0 " + u.getModes() + " * AAAAAA== :" + u.getRealName() );
 		}
-			
+
 		// TODO: And on and on and on
 	}
-	
+
 }
