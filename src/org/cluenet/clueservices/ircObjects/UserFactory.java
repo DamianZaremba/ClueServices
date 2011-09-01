@@ -3,6 +3,7 @@ package org.cluenet.clueservices.ircObjects;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.cluenet.clueservices.ircObjects.ChannelFactory.Channel;
 import org.cluenet.clueservices.ircObjects.ServerFactory.Server;
@@ -15,7 +16,7 @@ import org.w3c.dom.Node;
 public class UserFactory {
 	private static UserFactory factory = new UserFactory();
 	private static Map< String, User > map = Collections.synchronizedMap( new HashMap< String, User >() );
-	
+
 	public class User extends IrcObject implements IrcSource, IrcTarget {
 		private String nick;
 		private String user;
@@ -29,7 +30,7 @@ public class UserFactory {
 		private Boolean isAway;
 		private String awayReason;
 		private Map< String, Channel > channels = Collections.synchronizedMap( new HashMap< String, Channel >() );
-		
+
 		private User( String nick, String user, String host, String real, String modes, String ip, Server server ) {
 			this.nick = nick;
 			this.user = user;
@@ -59,23 +60,23 @@ public class UserFactory {
 		public String getNick() {
 			return nick;
 		}
-		
+
 		public String getUser() {
 			return user;
 		}
-		
+
 		public String getHost() {
 			return host;
 		}
-		
+
 		public String getRealName() {
 			return real;
 		}
-		
+
 		public String getModes() {
 			return modes;
 		}
-		
+
 		public String getIp() {
 			return ip;
 		}
@@ -87,16 +88,16 @@ public class UserFactory {
 		public void setAway( Boolean away ) {
 			isAway = away;
 		}
-		
+
 		public void setAway( String str ) {
 			isAway = true;
 			awayReason = str;
 		}
-		
+
 		public void setSwhois( String str ) {
 			swhois = str;
 		}
-		
+
 		public String getSwhois() {
 			return swhois;
 		}
@@ -104,7 +105,7 @@ public class UserFactory {
 		public void delChannel( Channel c ) {
 			channels.remove( c.getName() );
 		}
-		
+
 		public String toString() {
 			return getNick();
 		}
@@ -131,9 +132,9 @@ public class UserFactory {
 		}
 	}
 
-	
+
 	private UserFactory() {
-		
+
 	}
 
 	public static User fake( String nick, String user, String host, String real, String modes, String ip, Server server ) {
@@ -151,6 +152,9 @@ public class UserFactory {
 		return map.get( name );
 	}
 
+	public static Map< String, User> getUsers() {
+		return map;
+	}
 
 	public static void destroy( User u ) {
 		map.remove( u );
