@@ -8,10 +8,12 @@
 		<numeric>50</numeric>
 		<description>ClueServices - ClueNet IRC Services</description>
 		<module_dir>/home/damian/ClueServices/build/</module_dir>
+		<web_port>8847</web_port>
 	</server>
 
 	<modules>
 		<module>org.cluenet.clueservices.modules.protocol.UnrealIRCdProtocolModule</module>
 		<module>org.cluenet.clueservices.modules.services.TestingModule</module>
+		<module>org.cluenet.clueservices.modules.services.WebModule</module>
 	</modules>
 </configuration>
